@@ -123,6 +123,17 @@ app.get('/users/me',authenticate, (req,res) => {
   res.send(req.user);
 });
 
+// Post /users/login {email, password}
+app.post('/users/login', (req,res) => {
+  var body = _.pick(req.body, ['email','password']);
+
+  User.findByCredentials(body.email,body.password).then( (user) => {
+    res.send(user);
+  }).catch( (e) => {
+    res.status(400).send();
+  });
+});
+
 // listen
 app.listen(port, () => {
   console.log(`App is listening on PORT : ${port}`);
